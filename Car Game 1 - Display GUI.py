@@ -7,12 +7,12 @@ pygame.init()
 Quit_Game = False
 
 #Initialize Screen Width And Height
-FRAME_WIDTH = 500
+FRAME_WIDTH = 1000
 FRAME_HEIGHT = 500
 
 #Initialize Window And Title
 WINDOW = pygame.display.set_mode((FRAME_WIDTH, FRAME_HEIGHT))
-pygame.display.set_caption("Car Game 14/5/26")
+pygame.display.set_caption("Street Racer")
 
 #Main Game Loop
 while not Quit_Game:
