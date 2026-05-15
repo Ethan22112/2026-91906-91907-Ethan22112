@@ -1,5 +1,5 @@
 import pygame
-import time
+import random
 
 #Initializtion Of Pygame
 pygame.init()
@@ -34,8 +34,8 @@ PLAYER_COLOR = RED
 OBSTACLE_CAR_WIDTH = 20
 OBSTACLE_CAR_HEIGHT = 10
 
-Obstacle_car_X = 0
-Obstacle_car_Y = 0
+Obstacle_car_X = FRAME_WIDTH - OBSTACLE_CAR_WIDTH
+Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
 
 OBSTACLE_CAR_COLOR = BLUE
 
