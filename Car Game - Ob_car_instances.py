@@ -41,6 +41,9 @@ Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
 OBSTACLE_CAR_COLOR = BLUE
 Obstacle_car_speed = random.randint(1, 5)
 
+TOTAL_NUM_OBSTACLE_CARS = 10
+obstacle_cars = []
+
 #Setting The Game's Clock & FPS
 clock = pygame.time.Clock()
 FPS = 60
@@ -67,8 +70,10 @@ class Obstacle_Car:
      
        pygame.draw.rect(WINDOW, self.Obstacle_car_COLOR, (self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT))
 
-#Create one instance of an obstacle car for testing purposes
-Obstacle_Car1 = Obstacle_Car(BLUE, Obstacle_car_speed, Obstacle_car_X, Obstacle_car_Y, OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT)
+#Create Multiple Instances Of The Obstacle Car 
+for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
+    obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT)
+    obstacle_cars.append(obstacle_car)
 
 
 #Main Game Loop
@@ -84,8 +89,9 @@ while not Quit_Game:
     pygame.draw.rect(WINDOW, PLAYER_COLOR, (Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT))
 
     
-    #Call the one instance of the obstacle car
-    Obstacle_Car1.Go()
+    #Call all the instances of the obstacle cars to move
+    for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
+        obstacle_cars[i].Go()
    
     #refreshes the screen at a set frame rate
     clock.tick(FPS)
