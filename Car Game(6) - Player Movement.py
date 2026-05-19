@@ -16,6 +16,7 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 
+
 #Initialize Window And Title
 WINDOW = pygame.display.set_mode((FRAME_WIDTH, FRAME_HEIGHT))
 pygame.display.set_caption("Street Racer")
@@ -27,8 +28,16 @@ PLAYER_HEIGHT = 10
 
 Player_X = FRAME_WIDTH / 2
 Player_Y = FRAME_HEIGHT / 2
+Player_Speed = 2
 
 PLAYER_COLOR = RED
+
+
+#Instead of putting code directly under when a specific key is pressed, booleans will be used for more control
+Player_Up = False
+Player_Down = False
+Player_Left = False
+Player_Right = False
 
 
 #Initialize The Obstacle Car's Variables
@@ -88,6 +97,36 @@ while not Quit_Game:
 
     #Setting The Screen To Black Before Drawing Again
     WINDOW.fill(BLACK)
+
+    #The code below handles user inputs especially the arrow keys, this controls player movement
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP:
+            Player_Up = True
+        if event.key == pygame.K_DOWN:
+            Player_Down = True
+        if event.key == pygame.K_LEFT:
+            Player_Left = True
+        if event.key == pygame.K_RIGHT:
+            Player_Right = True
+        
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_UP:
+            Player_Up = False
+        if event.key == pygame.K_DOWN:
+            Player_Down = False
+        if event.key == pygame.K_LEFT:
+            Player_Left = False
+        if event.key == pygame.K_RIGHT:
+            Player_Right = False
+
+    if Player_Up == True:
+        Player_Y -= Player_Speed
+    if Player_Down == True:
+        Player_Y += Player_Speed
+    if Player_Left == True:
+        Player_X -= Player_Speed
+    if Player_Right == True:
+        Player_X += Player_Speed
  
     #draw a filled rectangle in the screen with the player's specifications
     pygame.draw.rect(WINDOW, PLAYER_COLOR, (Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT))
