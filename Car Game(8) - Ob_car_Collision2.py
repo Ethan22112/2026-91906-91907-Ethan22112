@@ -50,7 +50,7 @@ Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
 OBSTACLE_CAR_COLOR = BLUE
 Obstacle_car_speed = random.randint(1, 5)
 
-TOTAL_NUM_OBSTACLE_CARS = 100
+TOTAL_NUM_OBSTACLE_CARS = 10
 obstacle_cars = []
 
 
