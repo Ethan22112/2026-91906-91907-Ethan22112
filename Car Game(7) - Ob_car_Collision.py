@@ -50,7 +50,7 @@ Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
 OBSTACLE_CAR_COLOR = BLUE
 Obstacle_car_speed = random.randint(1, 5)
 
-TOTAL_NUM_OBSTACLE_CARS = 10
+TOTAL_NUM_OBSTACLE_CARS = 100
 obstacle_cars = []
 
 
@@ -61,15 +61,17 @@ FPS = 60
 
 #Obstacle Car Class - creates one instance of an obstacle car if called
 class Obstacle_Car:
-    def __init__(self, color, speed, x, y, width, height):
+    def __init__(self, color, speed, x, y, width, height, ID):
 
-        #sets the car instance's variables
+        #sets/instances the current car's variables
         self.Obstacle_car_speed = speed
         self.Obstacle_car_WIDTH = width
         self.Obstacle_car_HEIGHT = height
         self.Obstacle_car_X = x
         self.Obstacle_car_Y = y
         self.Obstacle_car_COLOR = color
+        self.ID = ID
+        self.rect = pygame.Rect(self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT)
 
     #function that controls the movement of the car where if called, the car will move 
     def Go(self):
@@ -79,16 +81,21 @@ class Obstacle_Car:
             self.Obstacle_car_X = FRAME_WIDTH
             self.Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
             self.Obstacle_car_speed = random.randint(1, 5)
-     
+        
        pygame.draw.rect(WINDOW, self.Obstacle_car_COLOR, (self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT))
+       self.rect = pygame.Rect(self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT)
 
+    #function that checks if this car collides with another car(not the player)
     def Check_Collision(self):
-        None
+        for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
+            if obstacle_cars[i].ID != self.ID:
+                if self.rect.colliderect(obstacle_cars[i].rect):
+                    pygame.draw.rect(WINDOW, RED, (self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT))
 
 
 #Create Multiple Instances Of The Obstacle Car 
 for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
-    obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT)
+    obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i)
     obstacle_cars.append(obstacle_car)
 
 
@@ -98,7 +105,7 @@ while not Quit_Game:
         if event.type == pygame.QUIT:
             Quit_Game = True
 
-    #Setting The Screen To Black Before Drawing Again
+    #Setting The Screen To Black Before Drawing The Cars Or Backdrop Again
     WINDOW.fill(BLACK)
 
     #The code below handles user inputs especially the arrow keys, this controls player movement
@@ -138,6 +145,7 @@ while not Quit_Game:
     #Call all the instances of the obstacle cars to move
     for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
         obstacle_cars[i].Go()
+        obstacle_cars[i].Check_Collision()
    
     #refreshes the screen at a set frame rate
     clock.tick(FPS)
