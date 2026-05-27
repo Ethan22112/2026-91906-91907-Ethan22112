@@ -1,6 +1,5 @@
 import pygame
 import random
-import keyboard
 
 #Initializtion Of Pygame
 pygame.init()
@@ -115,6 +114,7 @@ while not Quit_Game:
     WINDOW.fill(BLACK)
 
     #The code below handles user inputs especially the arrow keys, this controls player movement
+
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP:
             Player_Up = True
