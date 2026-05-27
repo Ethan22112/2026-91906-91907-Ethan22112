@@ -1,5 +1,6 @@
 import pygame
 import random
+import keyboard
 
 #Initializtion Of Pygame
 pygame.init()
