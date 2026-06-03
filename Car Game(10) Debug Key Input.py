@@ -110,10 +110,12 @@ while not Quit_Game:
         if event.type == pygame.QUIT:
             Quit_Game = True
 
-    #Setting The Screen To Black Before Drawing The Cars Or Backdrop Again
+    #Setting The Screen To Black Before Drawing The Cars Or Background Again
     WINDOW.fill(BLACK)
 
     #The code below handles user inputs especially the arrow keys, this controls player movement
+
+    keys = pygame.key.get_pressed()
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP:
@@ -136,29 +138,37 @@ while not Quit_Game:
             Player_Right = False
 
     if Player_Up == True:
-        if Player_Y >= 0:
-           Player_Y -= Player_Speed
+        if not keys[pygame.K_UP]:
+           Player_Up = False
         else:
-           Player_Y += Player_Speed
-           print('crossing top boundary...')
+           if Player_Y >= 0:
+              Player_Y -= Player_Speed
+           else:
+              Player_Y += Player_Speed
     if Player_Down == True:
-        if Player_Y + PLAYER_HEIGHT <= FRAME_HEIGHT:
-           Player_Y += Player_Speed
+        if not keys[pygame.K_DOWN]:
+            Player_Down = False
         else:
-           Player_Y -= Player_Speed
-           print('crossing bottom boundary...')
+           if Player_Y + PLAYER_HEIGHT <= FRAME_HEIGHT:
+              Player_Y += Player_Speed
+           else:
+              Player_Y -= Player_Speed
     if Player_Left == True:
-        if Player_X >= 0:
-           Player_X -= Player_Speed
+        if not keys[pygame.K_LEFT]:
+            Player_Left = False
         else:
-           Player_X += Player_Speed
-           print('crossing left boundary...')
+           if Player_X >= 0:
+              Player_X -= Player_Speed
+           else:
+              Player_X += Player_Speed
     if Player_Right == True:
-        if Player_X + PLAYER_WIDTH <= FRAME_WIDTH:
-           Player_X += Player_Speed
+        if not keys[pygame.K_RIGHT]:
+            Player_Right = False
         else:
-           Player_X -= Player_Speed
-           print('crossing right boundary...')
+           if Player_X + PLAYER_WIDTH <= FRAME_WIDTH:
+              Player_X += Player_Speed
+           else:
+              Player_X -= Player_Speed
  
     #draw a filled rectangle in the screen with the player's specifications
     pygame.draw.rect(WINDOW, PLAYER_COLOR, (Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT))
