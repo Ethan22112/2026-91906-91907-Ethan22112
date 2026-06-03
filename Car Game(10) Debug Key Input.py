@@ -84,6 +84,7 @@ class Obstacle_Car:
             self.Obstacle_car_speed = random.randint(1, 5)
             self.isAlive = True
         
+        # checks if the current car is still "alive", will continue to do as intended if so, will get "disabled" if not 
        if self.isAlive == True:
             pygame.draw.rect(WINDOW, self.Obstacle_car_COLOR, (self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT))
             self.rect = pygame.Rect(self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT)
