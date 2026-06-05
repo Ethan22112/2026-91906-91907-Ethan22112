@@ -175,6 +175,7 @@ while not Quit_Game:
            else:
               Player_X -= Player_Speed
 
+    #executes the code under the if statement, if, the player has not crashed into other cars.
     if Player_isalive == True:
 
        #update the player's 'rectangle' that detects collision
