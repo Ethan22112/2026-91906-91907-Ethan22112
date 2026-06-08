@@ -103,7 +103,7 @@ class Obstacle_Car:
                     Player_isalive = False
 
 
-#Create Multiple Instances Of The Obstacle Car 
+#Create Multiple Instances Of The Obstacle Car using a for loop 
 for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
     obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i)
     obstacle_cars.append(obstacle_car)
