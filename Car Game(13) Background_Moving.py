@@ -22,9 +22,8 @@ WINDOW = pygame.display.set_mode((FRAME_WIDTH, FRAME_HEIGHT))
 pygame.display.set_caption("Street Racer")
 
 
-#offset for display
-xOffset1 = 0
-xOffset2 = FRAME_WIDTH
+#Background Tile Variables
+tiles = []
 
 #Initialize The Player's car variables
 PLAYER_WIDTH = 20
@@ -70,6 +69,25 @@ ROAD_HEIGHT = ROAD_TILE.get_height()
 clock = pygame.time.Clock()
 FPS = 60
 
+#Background Tile Class - creates one instance of a background tile if called
+class Background_Tile:
+    def __init__(self, x, y, speed, size, image):
+
+        self.x = x
+        self.y = y
+        self.size = size
+        self.speed = speed
+        self.image = image
+
+    def Go(self):
+        self.x -= self.speed
+        WINDOW.blit(self.image, (self.x, self.y))
+
+        #Check if this current tile exceeds the left side of the screen, if so, then return to the far right of the screen
+        #This creates the illusion that the road is infinite
+        if self.x <= -(ROAD_WIDTH):
+            self.x = FRAME_WIDTH
+
 
 #Obstacle Car Class - creates one instance of an obstacle car if called
 class Obstacle_Car:
@@ -111,6 +129,13 @@ class Obstacle_Car:
                     self.isAlive = False
 
 
+#Create Multiple Instances Of Background Tiles using a for loop, assigning the desired x and y locations for each tile 
+for x in range(0, round(FRAME_WIDTH / ROAD_WIDTH) + ROAD_WIDTH):
+    for y in range(0, round(FRAME_HEIGHT / ROAD_HEIGHT)):
+        tile = Background_Tile(x * ROAD_WIDTH, y * ROAD_HEIGHT, 10, ROAD_WIDTH, ROAD_TILE)
+        tiles.append(tile)
+
+
 #Create Multiple Instances Of The Obstacle Car using a for loop 
 for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
     obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i)
@@ -126,15 +151,11 @@ while not Quit_Game:
     #Setting The Screen To Black Before Drawing The Cars Or Background Again
     WINDOW.fill(BLACK)
 
-    #test background
-    for x in range(0, round(FRAME_WIDTH / ROAD_WIDTH)):
-        for y in range(0, round(FRAME_HEIGHT / ROAD_HEIGHT)):
-
-            WINDOW.blit(ROAD_TILE, (x * ROAD_WIDTH + xOffset1, y * ROAD_HEIGHT))
-             
+    #Calling every background tile to move 
+    for i in range(0, len(tiles)):
+        tiles[i].Go()
     
     #The code below handles user inputs especially the arrow keys, this controls player movement
-
     keys = pygame.key.get_pressed()
 
     if event.type == pygame.KEYDOWN:
