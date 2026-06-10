@@ -22,10 +22,6 @@ WINDOW = pygame.display.set_mode((FRAME_WIDTH, FRAME_HEIGHT))
 pygame.display.set_caption("Street Racer")
 
 
-#offset for display
-xOffset1 = 0
-xOffset2 = FRAME_WIDTH
-
 #Initialize The Player's car variables
 PLAYER_WIDTH = 20
 PLAYER_HEIGHT = 10
@@ -130,7 +126,7 @@ while not Quit_Game:
     for x in range(0, round(FRAME_WIDTH / ROAD_WIDTH)):
         for y in range(0, round(FRAME_HEIGHT / ROAD_HEIGHT)):
 
-            WINDOW.blit(ROAD_TILE, (x * ROAD_WIDTH + xOffset1, y * ROAD_HEIGHT))
+            WINDOW.blit(ROAD_TILE, (x * ROAD_WIDTH, y * ROAD_HEIGHT))
              
     
     #The code below handles user inputs especially the arrow keys, this controls player movement
