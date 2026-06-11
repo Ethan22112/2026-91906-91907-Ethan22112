@@ -37,6 +37,10 @@ PLAYER_SPRITE = pygame.image.load("Sprites & Tiles/Blue Car Updated(1).png").con
 Player_rect = pygame.Rect(Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT)
 Player_isalive = True
 
+PLAYER_ANGLE = 10
+
+PLAYER_TURN_LEFT = pygame.transform.rotate(PLAYER_SPRITE, PLAYER_ANGLE)
+PLAYER_TURN_RIGHT = pygame.transform.rotate(PLAYER_SPRITE, -(PLAYER_ANGLE))
 
 #Instead of putting code directly under when a specific key is pressed, booleans will be used for more control
 Player_Up = False
@@ -218,7 +222,12 @@ while not Quit_Game:
        Player_rect = pygame.Rect(Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT)
  
        #draw a filled rectangle in the screen with the player's specifications
-       WINDOW.blit(PLAYER_SPRITE, (Player_X, Player_Y))
+       if Player_Up == True:
+           WINDOW.blit(PLAYER_TURN_LEFT, (Player_X, Player_Y))
+       elif Player_Down == True:
+           WINDOW.blit(PLAYER_TURN_RIGHT, (Player_X, Player_Y))
+       else:
+           WINDOW.blit(PLAYER_SPRITE, (Player_X, Player_Y))
 
        for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
            if Player_rect.colliderect(obstacle_cars[i]):
