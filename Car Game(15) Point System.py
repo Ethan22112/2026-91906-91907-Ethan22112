@@ -1,10 +1,13 @@
 import pygame
 import random
 
+import pygame.freetype
+
 #Initializtion Of Pygame
 pygame.init()
 
 Quit_Game = False
+FONT_SIZE = 12
 
 #Initialize Screen Width And Height
 FRAME_WIDTH = 1000
@@ -42,6 +45,8 @@ PLAYER_ANGLE = 10
 PLAYER_TURN_LEFT = pygame.transform.rotate(PLAYER_SPRITE, PLAYER_ANGLE)
 PLAYER_TURN_RIGHT = pygame.transform.rotate(PLAYER_SPRITE, -(PLAYER_ANGLE))
 
+points = 0
+
 #Instead of putting code directly under when a specific key is pressed, booleans will be used for more control
 Player_Up = False
 Player_Down = False
@@ -59,9 +64,10 @@ Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
 OBSTACLE_CAR_SPRITE = pygame.image.load("Sprites & Tiles/Red car Updated(1).png").convert_alpha()
 Obstacle_car_speed = random.randint(1, 5)
 
-TOTAL_NUM_OBSTACLE_CARS = 10
+TOTAL_NUM_OBSTACLE_CARS = 100
 obstacle_cars = []
 
+high_score = 0
 
 #Initialize Background Variables
 ROAD_TILE = pygame.image.load("Sprites & Tiles/Road.png").convert_alpha()
@@ -72,6 +78,23 @@ ROAD_HEIGHT = ROAD_TILE.get_height()
 #Setting The Game's Clock & FPS
 clock = pygame.time.Clock()
 FPS = 60
+FrameTick = 0
+
+def Load_High_Score():
+    try:
+        high_score_file = open("Scores/score", "r")
+        if points >= int(high_score_file.read()):
+            high_score_file = open("Scores/score", "w")
+            high_score_file.write(str(points))
+    except:
+        high_score_file = open("Scores/score", "w")
+        high_score_file.write("0")
+        
+    high_score_file = open("Scores/score", "r")
+    value = high_score_file.read()
+    high_score_file.close()
+
+    return value
 
 #Background Tile Class - creates one instance of a background tile if called
 class Background_Tile:
@@ -151,6 +174,9 @@ while not Quit_Game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             Quit_Game = True
+
+    #loading the current high score
+    high_score = Load_High_Score()
 
     #Setting The Screen To Black Before Drawing The Cars Or Background Again
     WINDOW.fill(BLACK)
@@ -240,7 +266,29 @@ while not Quit_Game:
     for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
-   
+    
+    #if the player hasn't crashed yet, check if the clock has reached a full second to update player points
+    if(Player_isalive):
+        FrameTick += 1
+        if FrameTick >= FPS:
+            points += 100
+            FrameTick = 0
+
+        #Display Score
+        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
+        Display_Score = font.render("Player Points "+ str(points) + ", High Score "+ str(high_score), True, (255, 255, 255), BLACK)
+        Score_Box = Display_Score.get_rect(center = (110, 10))
+        WINDOW.blit(Display_Score, Score_Box)
+
+    else:
+        #Display Score
+        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
+        Display_Score = font.render("Game Over! Your Points: "+str(points)+" High Score: "+str(high_score), True, (255, 255, 255), BLACK)
+        Score_Box = Display_Score.get_rect(center = (FRAME_WIDTH / 2, FRAME_HEIGHT / 2))
+        WINDOW.blit(Display_Score, Score_Box)
+
+
+       
     #refreshes the screen at a set frame rate
     clock.tick(FPS)
 
