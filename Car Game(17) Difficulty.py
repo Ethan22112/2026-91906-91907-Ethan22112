@@ -178,7 +178,7 @@ while not Quit_Game:
         if event.type == pygame.QUIT:
             Quit_Game = True
 
-    #loading the current high score
+    #Calls method 'Load_High_Score'
     high_score = Load_High_Score()
 
     #Setting The Screen To Black Before Drawing The Cars Or Background Again
@@ -188,7 +188,7 @@ while not Quit_Game:
     for i in range(0, len(tiles)):
         tiles[i].Go()
     
-    #The code below handles user inputs especially the arrow keys, this controls player movement
+    #The code below handles user inputs, especially the arrow keys. this controls player movement
     keys = pygame.key.get_pressed()
 
     if event.type == pygame.KEYDOWN:
@@ -211,6 +211,7 @@ while not Quit_Game:
         if event.key == pygame.K_RIGHT:
             Player_Right = False
 
+    #Checks if each key of movement (Arrow keys) are active or not. This prevents issues caused by pressing or releasing two or more keys at the same time.
     if Player_Up == True:
         if not keys[pygame.K_UP]:
            Player_Up = False
@@ -250,7 +251,7 @@ while not Quit_Game:
        #update the player's 'rectangle' that detects collision
        Player_rect = pygame.Rect(Player_X, Player_Y, PLAYER_WIDTH, PLAYER_HEIGHT)
  
-       #draw a filled rectangle in the screen with the player's specifications
+       #draw the player's car
        if Player_Up == True:
            WINDOW.blit(PLAYER_TURN_LEFT, (Player_X, Player_Y))
        elif Player_Down == True:
@@ -276,8 +277,9 @@ while not Quit_Game:
         if FrameTick >= FPS:
             points += 10
             FrameTick = 0
+            """Variable 'SpawnTick' increases by 1 if 1 second has passed, if this variable is greater than or equates to 10, or 10 seconds
+            , another obstacle car will be added to the game"""
             SpawnTick += 1
-            #If ten seconds has passed, add another obstacle car in the game
             if SpawnTick >= SPAWN_TIME:
                 SpawnTick = 0
                 #If the current number of obstacle cars is less than the total (100), add another obstacle car in the game.
