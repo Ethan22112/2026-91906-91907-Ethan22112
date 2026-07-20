@@ -204,6 +204,7 @@ while not Quit_Game:
             Player_Left = True
         if event.key == pygame.K_RIGHT:
             Player_Right = True
+        #Removes Instructions Text Once The First Key Is Pressed
         if Instructions == True:
             Instructions = False
         
