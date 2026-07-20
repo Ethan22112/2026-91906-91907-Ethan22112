@@ -13,6 +13,8 @@ FONT_SIZE = 12
 FRAME_WIDTH = 1000
 FRAME_HEIGHT = 500
 
+Instructions = True
+
 
 #Initialize Colors 
 RED = (255, 0, 0)
@@ -201,6 +203,8 @@ while not Quit_Game:
             Player_Left = True
         if event.key == pygame.K_RIGHT:
             Player_Right = True
+        if Instructions == True:
+            Instructions = False
         
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_UP:
@@ -299,6 +303,12 @@ while not Quit_Game:
         Display_Score = font.render("Game Over! Your Points: "+str(points)+",  High Score: "+str(high_score), True, (255, 255, 255), BLACK)
         Score_Box = Display_Score.get_rect(center = (FRAME_WIDTH / 2, FRAME_HEIGHT / 2))
         WINDOW.blit(Display_Score, Score_Box)
+
+    if Instructions == True:
+        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
+        Instructions_Text = font.render("Arrow Keys To Move!", True, (255, 255, 255), BLACK)
+        Instruction_Box = Display_Score.get_rect(center = (FRAME_WIDTH / 2, FRAME_HEIGHT / 2))
+        WINDOW.blit(Instructions_Text, Instruction_Box)
        
     #refresh the screen at a set frame rate
     clock.tick(FPS)
