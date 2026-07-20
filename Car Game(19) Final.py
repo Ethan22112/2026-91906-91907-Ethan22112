@@ -277,6 +277,7 @@ while not Quit_Game:
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
 
+    #Function for displaying text
     def Render_Box(Text, Primary_Color, Background_Color, PositionX, PositionY):
         font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
         Display = font.render(Text, True, Primary_Color, Background_Color)
