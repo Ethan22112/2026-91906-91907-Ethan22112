@@ -20,6 +20,7 @@ Instructions = True
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 
 #Initialize Window And Title
@@ -275,6 +276,12 @@ while not Quit_Game:
     for i in range(0, len(obstacle_cars)):
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
+
+    def Render_Box(Text, Primary_Color, Background_Color, PositionX, PositionY):
+        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
+        Display = font.render(Text, True, Primary_Color, Background_Color)
+        Text_Box = Display.get_rect(center = (PositionX, PositionY))
+        WINDOW.blit(Display, Text_Box)
     
     #if the player hasn't crashed yet, check if the clock has reached a full second to update player points
     if(Player_isalive):
@@ -292,23 +299,15 @@ while not Quit_Game:
                     obstacle_cars.append(Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i))
 
         #Display Score
-        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
-        Display_Score = font.render("Player Points "+ str(points) + ",  High Score "+ str(high_score), True, (255, 255, 255), BLACK)
-        Score_Box = Display_Score.get_rect(center = (110, 10))
-        WINDOW.blit(Display_Score, Score_Box)
+        Render_Box(("Player Points "+ str(points) + ",  High Score "+ str(high_score)), WHITE, BLACK, 110, 10)
 
     else:
         #Display Game Over Text
-        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
-        Display_Score = font.render("Game Over! Your Points: "+str(points)+",  High Score: "+str(high_score), True, (255, 255, 255), BLACK)
-        Score_Box = Display_Score.get_rect(center = (FRAME_WIDTH / 2, FRAME_HEIGHT / 2))
-        WINDOW.blit(Display_Score, Score_Box)
+        Render_Box(("Game Over! Your Points: "+str(points)+",  High Score: "+str(high_score)), WHITE, BLACK, FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
 
     if Instructions == True:
-        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
-        Instructions_Text = font.render("Arrow Keys To Move!", True, (255, 255, 255), BLACK)
-        Instruction_Box = Display_Score.get_rect(center = (FRAME_WIDTH / 2, FRAME_HEIGHT / 2))
-        WINDOW.blit(Instructions_Text, Instruction_Box)
+        #Display Instructions
+        Render_Box("Arrow Keys To Move!", WHITE, BLACK, FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
        
     #refresh the screen at a set frame rate
     clock.tick(FPS)
