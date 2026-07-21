@@ -89,15 +89,15 @@ FrameTick = 0
 #Loads, compares and updates the current high score 
 def Load_High_Score():
     try:
-        high_score_file = open("Scores/score", "r")
+        high_score_file = open("score", "r")
         if points >= int(high_score_file.read()):
-            high_score_file = open("Scores/score", "w")
+            high_score_file = open("score", "w")
             high_score_file.write(str(points))
     except:
-        high_score_file = open("Scores/score", "w")
+        high_score_file = open("score", "w")
         high_score_file.write("0")
         
-    high_score_file = open("Scores/score", "r")
+    high_score_file = open("score", "r")
     value = high_score_file.read()
     high_score_file.close()
 
