@@ -68,7 +68,7 @@ OBSTACLE_CAR_SPRITE = pygame.image.load("Sprites & Tiles/Red car Updated(1).png"
 Obstacle_car_speed = random.randint(1, 5)
 
 MAX_NUM_OBSTACLE_CARS = 120
-TOTAL_NUM_OBSTACLE_CARS = 1
+TOTAL_NUM_OBSTACLE_CARS = 0
 obstacle_cars = []
 
 SPAWN_TIME = 5
@@ -286,7 +286,7 @@ while not Quit_Game:
         WINDOW.blit(Display, Text_Box)
     
     #if the player hasn't crashed yet, check if the clock has reached a full second to update player points
-    if(Player_isalive):
+    if(Player_isalive) and  not Instructions:
         FrameTick += 1
         if FrameTick >= FPS:
             points += 10
@@ -303,7 +303,7 @@ while not Quit_Game:
         #Display Score
         Render_Box(("Player Points "+ str(points) + ",  High Score "+ str(high_score)), WHITE, BLACK, 110, 10)
 
-    else:
+    elif not Player_isalive:
         #Display Game Over Text
         Render_Box(("Game Over! Your Points: "+str(points)+",  High Score: "+str(high_score)), WHITE, BLACK, FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
 
