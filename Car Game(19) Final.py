@@ -292,7 +292,7 @@ while not Quit_Game:
             points += 10
             FrameTick = 0
             """Variable 'SpawnTick' increases by 1 if 1 second has passed, if this variable is greater than or equates to 10, or 10 seconds
-            , another obstacle car will be added to the game"""
+            , another obstacle car will be added to the game, essentially, another obstacle car gets added every 10 seconds"""
             SpawnTick += 1
             if SpawnTick >= SPAWN_TIME:
                 SpawnTick = 0
