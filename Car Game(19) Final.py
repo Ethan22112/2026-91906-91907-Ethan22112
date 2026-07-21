@@ -225,32 +225,24 @@ while not Quit_Game:
         else:
            if Player_Y >= 0:
               Player_Y -= Player_Speed
-           else:
-              Player_Y += 2
     if Player_Down == True:
         if not keys[pygame.K_DOWN]:
             Player_Down = False
         else:
            if Player_Y + PLAYER_HEIGHT <= FRAME_HEIGHT:
               Player_Y += Player_Speed
-           else:
-              Player_Y -= 2
     if Player_Left == True:
         if not keys[pygame.K_LEFT]:
             Player_Left = False
         else:
            if Player_X >= 0:
               Player_X -= Player_Speed
-           else:
-              Player_X += 2
     if Player_Right == True:
         if not keys[pygame.K_RIGHT]:
             Player_Right = False
         else:
            if Player_X + PLAYER_WIDTH <= FRAME_WIDTH:
               Player_X += Player_Speed
-           else:
-              Player_X -= Player_Speed
 
     #executes the code under the if statement, if, the player has not crashed into other cars.
     if Player_isalive == True:
