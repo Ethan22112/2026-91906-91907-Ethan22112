@@ -155,7 +155,7 @@ class Obstacle_Car:
         else:
             self.rect = pygame.Rect(0, 0, 0, 0)
 
-    #function that checks if this car collides with another car(not the player)
+    #function that iterates through the entire collection of obstacle cars, and checks if this car's bounding box collides with any of them.
     def Check_Collision(self):
         for i in range(0, len(obstacle_cars)):
             if obstacle_cars[i].ID != self.ID:
