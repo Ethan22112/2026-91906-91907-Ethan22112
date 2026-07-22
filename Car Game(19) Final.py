@@ -103,6 +103,13 @@ def Load_High_Score():
 
     return value
 
+#Function for displaying text
+def Render_Box(Text, Primary_Color, Background_Color, PositionX, PositionY):
+    font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
+    Display = font.render(Text, True, Primary_Color, Background_Color)
+    Text_Box = Display.get_rect(center = (PositionX, PositionY))
+    WINDOW.blit(Display, Text_Box)
+
 #Background Tile Class - creates one instance of a background tile if called
 class Background_Tile:
     def __init__(self, x, y, speed, size, image):
@@ -269,13 +276,6 @@ while not Quit_Game:
     for i in range(0, len(obstacle_cars)):
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
-
-    #Function for displaying text
-    def Render_Box(Text, Primary_Color, Background_Color, PositionX, PositionY):
-        font = pygame.font.Font("freesansbold.ttf", FONT_SIZE)
-        Display = font.render(Text, True, Primary_Color, Background_Color)
-        Text_Box = Display.get_rect(center = (PositionX, PositionY))
-        WINDOW.blit(Display, Text_Box)
     
     #if the player hasn't crashed yet, check if the clock has reached a full second to update player points
     if(Player_isalive) and  not Instructions:
