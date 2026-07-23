@@ -34,6 +34,7 @@ tiles = []
 #Initialize The Player's car variables
 PLAYER_WIDTH = 20
 PLAYER_HEIGHT = 10
+GENERAL_SPEED = 10
 
 Player_X = FRAME_WIDTH / 2
 Player_Y = FRAME_HEIGHT / 2
@@ -48,7 +49,7 @@ PLAYER_ANGLE = 10
 PLAYER_TURN_LEFT = pygame.transform.rotate(PLAYER_SPRITE, PLAYER_ANGLE)
 PLAYER_TURN_RIGHT = pygame.transform.rotate(PLAYER_SPRITE, -(PLAYER_ANGLE))
 
-points = 0
+Player_points = 0
 
 #Instead of putting code directly under when a specific key is pressed, booleans will be used for more control
 Player_Up = False
@@ -71,8 +72,8 @@ MAX_NUM_OBSTACLE_CARS = 120
 TOTAL_NUM_OBSTACLE_CARS = 0
 obstacle_cars = []
 
-SPAWN_TIME = 5
-SpawnTick = 0
+#After every ten seconds, another red car will be added.
+SPAWN_TIME = 10
 
 
 #Initialize Background Variables
@@ -90,9 +91,9 @@ FrameTick = 0
 def Load_High_Score():
     try:
         high_score_file = open("score", "r")
-        if points >= int(high_score_file.read()):
+        if Player_points >= int(high_score_file.read()):
             high_score_file = open("score", "w")
-            high_score_file.write(str(points))
+            high_score_file.write(str(Player_points))
     except:
         high_score_file = open("score", "w")
         high_score_file.write("0")
@@ -100,7 +101,7 @@ def Load_High_Score():
     high_score_file = open("score", "r")
     value = high_score_file.read()
     high_score_file.close()
-
+    
     return value
 
 #Function for displaying text
@@ -132,7 +133,7 @@ class Background_Tile:
 
 #Obstacle Car Class - creates one instance of an obstacle car if called
 class Obstacle_Car:
-    def __init__(self, color, speed, x, y, width, height, ID):
+    def __init__(self, color, speed, x, y, width, height):
 
         #sets/instances the current car's variables
         self.Obstacle_car_speed = speed
@@ -141,9 +142,9 @@ class Obstacle_Car:
         self.Obstacle_car_X = x
         self.Obstacle_car_Y = y
         self.Obstacle_car_COLOR = color
-        self.ID = ID
         self.rect = pygame.Rect(self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT)
         self.isAlive = True
+        self.GivePoints = True
 
     #function that controls the movement of the car where if called, the car will move 
     def Go(self):
@@ -153,6 +154,7 @@ class Obstacle_Car:
             self.Obstacle_car_X = FRAME_WIDTH
             self.Obstacle_car_Y = random.randint(0, FRAME_HEIGHT)
             self.Obstacle_car_speed = random.randint(1, 5)
+            self.GivePoints = True
             self.isAlive = True
         
         # checks if the current car is still "alive", will continue to do as intended if so, will get "disabled" if not 
@@ -161,25 +163,33 @@ class Obstacle_Car:
             self.rect = pygame.Rect(self.Obstacle_car_X, self.Obstacle_car_Y, self.Obstacle_car_WIDTH, self.Obstacle_car_HEIGHT)
         else:
             self.rect = pygame.Rect(0, 0, 0, 0)
+            self.GivePoints = False
 
     #function that iterates through the entire collection of obstacle cars, and checks if this car's bounding box collides with any of them.
     def Check_Collision(self):
         for i in range(0, len(obstacle_cars)):
-            if obstacle_cars[i].ID != self.ID:
+            if obstacle_cars[i] != self:
                 if self.rect.colliderect(obstacle_cars[i].rect):
                     self.isAlive = False
+
+    def Check_Pass(self):
+        if self.GivePoints == True:
+            if self.Obstacle_car_X <= Player_X:
+                global Player_points
+                Player_points += 10
+                self.GivePoints = False
 
 
 #Create Multiple Instances Of Background Tiles using a for loop, assigning the desired x and y locations for each tile 
 for x in range(0, round(FRAME_WIDTH / ROAD_WIDTH) + ROAD_WIDTH):
     for y in range(0, round(FRAME_HEIGHT / ROAD_HEIGHT)):
-        tile = Background_Tile(x * ROAD_WIDTH, y * ROAD_HEIGHT, 10, ROAD_WIDTH, ROAD_TILE)
+        tile = Background_Tile(x * ROAD_WIDTH, y * ROAD_HEIGHT, GENERAL_SPEED, ROAD_WIDTH, ROAD_TILE)
         tiles.append(tile)
 
 
 #Create Multiple Instances Of The Obstacle Car using a for loop 
 for i in range(0, TOTAL_NUM_OBSTACLE_CARS):
-    obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i)
+    obstacle_car = Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT)
     obstacle_cars.append(obstacle_car)
 
 
@@ -276,28 +286,22 @@ while not Quit_Game:
     for i in range(0, len(obstacle_cars)):
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
+        obstacle_cars[i].Check_Pass()
     
-    #if the player hasn't crashed yet, check if the clock has reached a full second to update player points
+    #if the player hasn't crashed yet, check if the clock has reached a 10 seconds to add another obstacle car
     if(Player_isalive) and  not Instructions:
         FrameTick += 1
-        if FrameTick >= FPS:
-            points += 10
+        if FrameTick >= (FPS * SPAWN_TIME):
             FrameTick = 0
-            """Variable 'SpawnTick' increases by 1 if 1 second has passed, if this variable is greater than or equates to 10, or 10 seconds
-            , another obstacle car will be added to the game, essentially, another obstacle car gets added every 10 seconds"""
-            SpawnTick += 1
-            if SpawnTick >= SPAWN_TIME:
-                SpawnTick = 0
-                #If the current number of obstacle cars is less than the total (100), add another obstacle car in the game.
-                if (len(obstacle_cars) >= TOTAL_NUM_OBSTACLE_CARS):
-                    obstacle_cars.append(Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT, i))
+            if (len(obstacle_cars) >= TOTAL_NUM_OBSTACLE_CARS):
+                obstacle_cars.append(Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT))
 
         #Display Score
-        Render_Box(("Player Points "+ str(points) + ",  High Score "+ str(high_score)), WHITE, BLACK, 110, 10)
+        Render_Box(("Player Points "+ str(Player_points) + ",  High Score "+ str(high_score)), WHITE, BLACK, 110, 10)
 
     elif not Player_isalive:
         #Display Game Over Text
-        Render_Box(("Game Over! Your Points: "+str(points)+",  High Score: "+str(high_score)), WHITE, BLACK, FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
+        Render_Box(("Game Over! Your Points: "+str(Player_points)+",  High Score: "+str(high_score)), WHITE, BLACK, FRAME_WIDTH / 2, FRAME_HEIGHT / 2)
 
     if Instructions == True:
         #Display Instructions
