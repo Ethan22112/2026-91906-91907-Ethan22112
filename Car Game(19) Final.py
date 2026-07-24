@@ -172,6 +172,7 @@ class Obstacle_Car:
                 if self.rect.colliderect(obstacle_cars[i].rect):
                     self.isAlive = False
 
+    #function that checks if (this) obstacle car passes the player (in x axis), will increase the player's score by 10 if so.  
     def Check_Pass(self):
         if self.GivePoints == True:
             if self.Obstacle_car_X <= Player_X:
@@ -221,9 +222,10 @@ while not Quit_Game:
             Player_Left = True
         if event.key == pygame.K_RIGHT:
             Player_Right = True
-        #Removes Instructions Text Once The First Key Is Pressed
+        #Removes Instructions Text Once The First Key Is Pressed, spawn an obstacle car immediately
         if Instructions == True:
-            Instructions = False
+           obstacle_cars.append(Obstacle_Car(BLUE, random.randrange(1, 5), random.randrange(FRAME_WIDTH, FRAME_WIDTH * 2), random.randrange(0, FRAME_HEIGHT), OBSTACLE_CAR_WIDTH, OBSTACLE_CAR_HEIGHT))
+           Instructions = False
         
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_UP:
@@ -287,6 +289,7 @@ while not Quit_Game:
         obstacle_cars[i].Go()
         obstacle_cars[i].Check_Collision()
         obstacle_cars[i].Check_Pass()
+
     
     #if the player hasn't crashed yet, check if the clock has reached a 10 seconds to add another obstacle car
     if(Player_isalive) and  not Instructions:
